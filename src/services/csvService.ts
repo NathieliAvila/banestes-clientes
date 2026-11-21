@@ -1,3 +1,5 @@
+import Papa from "papaparse";
+
 export async function buscarCsv(url:string) : Promise<string> {
     try {
         const resposta = await fetch(url);
@@ -7,4 +9,12 @@ export async function buscarCsv(url:string) : Promise<string> {
         console.error("Erro: ", error);
         throw error;
     }
+}
+
+export function parsearCsv(texto: string){
+    const resultado = Papa.parse<Record<string, string>>(texto, {
+        header: true,
+        skipEmptyLines: true
+    });
+    return resultado.data;
 }

@@ -16,7 +16,7 @@ export interface Cliente {
 export interface Conta {
     id: string;
     cpfCnpjCliente: string;
-    tipo: "Corrente" | "Poupanca"
+    tipo: "corrente" | "poupanca";
     saldo: number;
     limiteCredito: number;
     creditoDisponivel: number;
