@@ -18,3 +18,4 @@ export function parsearCsv(texto: string){
     });
     return resultado.data;
 }
+
