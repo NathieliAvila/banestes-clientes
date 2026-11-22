@@ -11,17 +11,10 @@ createRoot(document.getElementById('root')!).render(
 
 import { parsearCsv } from './services/csvService.ts'
 import { buscarCsv } from './services/csvService.ts'
-buscarCsv('https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=clientes').then(texto => console.log(parsearCsv(texto)));
+/* buscarCsv('https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=clientes').then(texto => console.log(parsearCsv(texto))); */
 
 import { paraNumero, textoOpcional, paraData } from './utils/conversores.ts'
 
-let teste: string = "abc";
-console.log(textoOpcional(teste));
+import { normalizarCliente } from './utils/normalizacao.ts'
 
-let numero = "123";
-console.log(paraNumero(numero));
-
-
-
-
-console.log(paraData("90-05-14"));
+buscarCsv('https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=clientes').then(texto => parsearCsv(texto).map(normalizarCliente)).then(clientes => console.log(clientes.length, clientes[0]));
