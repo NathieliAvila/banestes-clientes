@@ -11,10 +11,9 @@ createRoot(document.getElementById('root')!).render(
 
 import { parsearCsv } from './services/csvService.ts'
 import { buscarCsv } from './services/csvService.ts'
-/* buscarCsv('https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=clientes').then(texto => console.log(parsearCsv(texto))); */
+import { NormalizarAgencias, normalizarClientes } from './utils/normalizacao.ts'
 
-import { paraNumero, textoOpcional, paraData } from './utils/conversores.ts'
 
-import { normalizarCliente } from './utils/normalizacao.ts'
+const agencias = 'https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=agencias';
 
-buscarCsv('https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=clientes').then(texto => parsearCsv(texto).map(normalizarCliente)).then(clientes => console.log(clientes.length, clientes[0]));
+
