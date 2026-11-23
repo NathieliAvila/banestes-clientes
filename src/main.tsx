@@ -9,11 +9,7 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-import { parsearCsv } from './services/csvService.ts'
-import { buscarCsv } from './services/csvService.ts'
-import { NormalizarAgencias, normalizarClientes } from './utils/normalizacao.ts'
+import { carregarDados } from './services/dadosService.ts'
 
 
-const agencias = 'https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=agencias';
-
-
+carregarDados().then(dados => console.log(dados));

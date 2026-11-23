@@ -1,4 +1,4 @@
-import type { Cliente, Agencia } from "../types";
+import type { Cliente, Agencia, Conta} from "../types";
 import { paraData, paraNumero, textoOpcional } from "./conversores";
 
 function textoObrigatorio(valor: string | undefined, nomeDoCampo: string): string {
@@ -15,7 +15,7 @@ function paraEstadoCivil(valor: string | undefined): EstadoCivil {
 
 const ESTADOS_CIVIS = ["Solteiro", "Casado", "Viúvo", "Divorciado"] as const;
 type EstadoCivil = (typeof ESTADOS_CIVIS) [number];
-export function normalizarCliente(linha: Record<string, string>): Cliente {
+function normalizarCliente(linha: Record<string, string>): Cliente {
     return {
         id: textoObrigatorio(linha.id, "id"),
         cpfCnpj: textoObrigatorio(linha.cpfCnpj, "cpfCnpj"),
@@ -28,7 +28,7 @@ export function normalizarCliente(linha: Record<string, string>): Cliente {
         rendaAnual: paraNumero(linha.rendaAnual),
         patrimonio: paraNumero(linha.patrimonio),
         estadoCivil: paraEstadoCivil(linha.estadoCivil),
-        codigoAgencia: paraNumero(linha.codigoAgencia),
+        codigoAgencia: paraNumero(linha.codigoAgencia)
     };
 
 }
@@ -48,26 +48,61 @@ export function normalizarClientes(linhas: Record<string, string>[]): {clientes:
     return {clientes, avisos};
 }
 
-export function NormalizarAgencia(linha: Record<string, string>): Agencia {
+function normalizarAgencia(linha: Record<string, string>): Agencia {
     return{
         id: textoObrigatorio(linha.id, "id"),
         codigo: paraNumero(linha.codigo),
         nome: textoObrigatorio(linha.nome, "nome"),
-        endereco: textoObrigatorio(linha.endereco, "endereco"),
+        endereco: textoObrigatorio(linha.endereco, "endereco")
     };
 
 }
 
-export function NormalizarAgencias(linhas: Record<string, string>[]): {agencias: Agencia[], avisos: string[]} {
+export function normalizarAgencias(linhas: Record<string, string>[]): {agencias: Agencia[], avisos: string[]} {
     const agencias: Agencia[] = [];
     const avisos: string[] = [];
     linhas.forEach((linha, indice) => {
         try {
-            agencias.push(NormalizarAgencia(linha));
+            agencias.push(normalizarAgencia(linha));
         } catch (error) {
             const motivo = error instanceof Error ? error.message: String(error);
             avisos.push(`Linha ${indice + 2}: ${motivo}`);
         }
         });
     return {agencias, avisos};
+}
+
+const TIPO_CONTA = ["corrente", "poupanca"] as const;
+type TipoConta = (typeof TIPO_CONTA) [number];
+
+function paraTipoConta(valor: string | undefined): TipoConta {
+    const limpo = valor?.trim().toLowerCase();
+    const achada = TIPO_CONTA.find(c => c.toLowerCase() === limpo);
+    if (achada === undefined) throw new Error(`Tipo de conta inválido: ${valor}`);
+    return achada;
+}
+
+function normalizarConta(linha: Record<string, string>): Conta {
+    return{
+        id: textoObrigatorio(linha.id, "id"),
+        cpfCnpjCliente: textoObrigatorio(linha.cpfCnpjCliente, "cpfCnpjCliente"),
+        tipo: paraTipoConta(linha.tipo),
+        saldo: paraNumero(linha.saldo),
+        limiteCredito: paraNumero(linha.limiteCredito),
+        creditoDisponivel: paraNumero(linha.creditoDisponivel)
+    };
+}
+
+export function normalizarContas(linhas: Record<string, string>[]): {contas: Conta[], avisos: string[]} {
+    const contas: Conta[] = [];
+    const avisos: string[] = [];
+    linhas.forEach((linha, indice) => {
+        try {
+            contas.push(normalizarConta(linha));
+        } catch (error) {
+            const motivo = error instanceof Error ? error.message: String(error);
+            avisos.push(`Linha ${indice + 2}: ${motivo}`);
+        }
+    });
+    return {contas, avisos};
 }
