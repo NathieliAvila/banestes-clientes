@@ -20,7 +20,7 @@ export function verificarReferencias(dados: DadosCarregados): string[]{
         });
 
         if(!existe) {
-            avisos.push(`Conta sem cliente / com cpf inexistente: ${conta.id}`);
+            avisos.push(`Conta sem cliente / com cpf inexistente: ${conta.id}\n CpfCnfj: ${conta.cpfCnpjCliente}`);
         }
     });
 
@@ -30,17 +30,10 @@ export function verificarReferencias(dados: DadosCarregados): string[]{
         });
 
         if(!existe) {
-            avisos.push(`Cliente com agência inexistente: ${cliente.id}`);
+            avisos.push(`Cliente com agência inexistente: ${cliente.id}\n Código: ${cliente.codigoAgencia}`);
         }
     })
 
     return avisos;
 } 
 
-/* 
-Recebe clientes, contas e agências, e devolve uma lista de avisos com:
-
-cada conta cujo cpfCnpjCliente não pertence a nenhum cliente;
-cada cliente cujo codigoAgencia não existe nas agências.
-
-*/
