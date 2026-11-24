@@ -29,3 +29,8 @@ export interface Agencia {
     endereco: string;
 
 }
+
+
+export interface DadosCarregados {
+    clientes: Cliente[], contas: Conta[], agencias: Agencia[], avisos: string[]
+}
