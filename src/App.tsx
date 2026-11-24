@@ -3,6 +3,7 @@ import { carregarDados } from './services/dadosService';
 import type { DadosCarregados } from './types'
 
 import './App.css'
+import ListaClientes from './components/ListaClientes';
 
 
 
@@ -40,7 +41,12 @@ function App() {
     return null;
   }
 
-  return <h1>{dados.clientes.length} clientes carregados</h1>
+  return (
+    <main>
+      <h1>Clientes</h1>
+      <ListaClientes clientes={dados.clientes}/>
+    </main>
+  );
 
 }
 
