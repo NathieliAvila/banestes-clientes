@@ -9,3 +9,12 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
+import { carregarDados } from './services/dadosService.ts'
+import { contasDoCliente, agenciaDoCliente, verificarReferencias } from './utils/relacionamentos.ts'
+
+carregarDados().then(dados => {
+  console.log("Avisos de referência:", verificarReferencias(dados));
+  const primeiro = dados.clientes[0];
+  console.log(contasDoCliente(dados.contas, primeiro.cpfCnpj));
+  console.log(agenciaDoCliente(dados.agencias, primeiro.codigoAgencia));
+});
