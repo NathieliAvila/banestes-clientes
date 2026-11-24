@@ -6,6 +6,11 @@ const criarURL = (aba: string): string => {
     return `https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=${aba}`;
 }
 
+ /* Recebe o nome da planilha e a lista de avisos. Devolve a lista com o prefixo.*/
+export function comOrigem(origem: string, avisos: string[]): string[] {
+    return avisos.map(texto => `${origem} - ${texto}`)
+}
+
 export async function carregarDados(): Promise<DadosCarregados> {
 
     const clientesUrl = criarURL("clientes");
@@ -21,11 +26,12 @@ export async function carregarDados(): Promise<DadosCarregados> {
     const resultadoClientes = normalizarClientes(linhasClientes);
     const resultadoContas = normalizarContas(linhasContas);
     const resultadoAgencias = normalizarAgencias(linhasAgencias);
-    const clientesAviso = resultadoClientes.avisos.map(texto => `Clientes - ${texto}`);
-    const contasAviso = resultadoContas.avisos.map(texto => `Contas - ${texto}`);
-    const agenciasAviso = resultadoAgencias.avisos.map(texto => `Clientes - ${texto}`);
+    const clientesAviso = comOrigem("Clientes", resultadoClientes.avisos);
+    const contasAviso = comOrigem("Contas", resultadoContas.avisos);
+    const agenciasAviso = comOrigem("Agencias", resultadoAgencias.avisos);
 
     return{clientes: resultadoClientes.clientes, contas: resultadoContas.contas, agencias: resultadoAgencias.agencias, avisos: [...clientesAviso, ...contasAviso, ...agenciasAviso]};
 
 }
+
 

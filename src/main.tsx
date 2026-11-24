@@ -9,7 +9,3 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-import { carregarDados } from './services/dadosService.ts'
-
-
-carregarDados().then(dados => console.log(dados));
