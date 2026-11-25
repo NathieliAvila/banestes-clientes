@@ -16,7 +16,10 @@ function App() {
   useEffect(() => {
     carregarDados()
     .then(resultado => {
-      setDados(resultado);
+      setDados(resultado) 
+      if (resultado.avisos.length > 0) {
+  console.warn("Avisos ao carregar dados:", resultado.avisos);
+};
        if (resultado.avisos.length > 0) {
         console.warn("Avisos ao carregar dados:", resultado.avisos)
       };
@@ -47,7 +50,6 @@ function App() {
       <ListaClientes clientes={dados.clientes}/>
     </main>
   );
-
 }
 
 export default App

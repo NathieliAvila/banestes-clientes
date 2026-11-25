@@ -1,4 +1,4 @@
-import type { Cliente, Conta, Agencia, DadosCarregados} from "../types";
+import type { DadosCarregados} from "../types";
 import { normalizarAgencias, normalizarClientes, normalizarContas } from "../utils/normalizacao";
 import { buscarCsv, parsearCsv } from "./csvService";
 
