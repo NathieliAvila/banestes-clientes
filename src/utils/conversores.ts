@@ -1,8 +1,10 @@
+//Marca campo como opcional. Indica que pode ter um valor ausente.
 export function textoOpcional(valor: string | undefined): string | undefined {
     if (valor === undefined || valor.trim() === "" ) return undefined;
     return valor.trim();
 }
 
+//Converte valor para número. Verifica se está vazio e se é um número.
 export function paraNumero(valor: string | undefined): number {
     if (valor === undefined || valor.trim() === "") throw new Error("Valor ausente ou vazio");
     const numero = Number(valor);
@@ -10,24 +12,29 @@ export function paraNumero(valor: string | undefined): number {
     return numero;
 } 
 
+//Converte para data. 
 export function paraData(valor: string | undefined): Date {
+    //Verifica se está vazio.
     if (valor === undefined || valor.trim() === "") throw new Error("Valor ausente");
+
+    //Desestruturação. Separa os elementos a partir do '-' e os atribui a variáveis individuais, seguindo a ordem de escrita.
     const [ano, mes, dia] = valor.split("-").map(Number);
 
+    //Se pelo menos um elemento não for um número, retorna um erro.
     if (Number.isNaN(ano) || Number.isNaN(mes) || Number.isNaN(dia)) throw new Error(`Valor inválido: ${valor}`);
+
     const data = new Date(ano, mes - 1, dia);
-
-    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() != dia ) throw new Error(`Data inválida: ${valor}`);
-
+    //Validação por ida e volta. Verifica se o Date aceitou uma data impossível (ex: 2026-02-31).
+    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia ) throw new Error(`Data inválida: ${valor}`);
     return data;
 } 
 
-/* Deixa somente digitos no cpfCnpj*/
+//Deixa somente digitos no cpfCnpj.
 export function normalizarCpfCnpj(valor: string ): string {
     return valor.replace(/\D/g, "");  
 }
 
-/* Verifica se cpfCnpj possui tamanho de 11 ou 14 caracteres */
+//Verifica se cpfCnpj possui tamanho de 11 ou 14 caracteres.
 export function cpfCnpjTemTamanhoValido(cpfCnpj: string): boolean {
     return cpfCnpj.length === 11 || cpfCnpj.length === 14;
 }

@@ -1,14 +1,19 @@
 import type { Cliente, Agencia, Conta} from "../types";
 import { paraData, paraNumero, textoOpcional, normalizarCpfCnpj } from "./conversores";
 
+const ESTADOS_CIVIS = ["Solteiro", "Casado", "Viúvo", "Divorciado"] as const;
+type EstadoCivil = (typeof ESTADOS_CIVIS) [number];
+
 const TIPO_CONTA = ["corrente", "poupanca"] as const;
 type TipoConta = (typeof TIPO_CONTA) [number];
+
 
 function textoObrigatorio(valor: string | undefined, nomeDoCampo: string): string {
     if (valor === undefined || valor.trim() === "") throw new Error(`Campo obrigatório vazio: ${nomeDoCampo}`);
     return valor.trim();
 }
 
+//Verifica se estadoCivil está preenchido com opções válidas (definidas em ESTADOS_CIVIS).
 function paraEstadoCivil(valor: string | undefined): EstadoCivil {
     const limpo = valor?.trim().toLowerCase();
     const achada = ESTADOS_CIVIS.find(c => c.toLowerCase() === limpo);
@@ -16,8 +21,8 @@ function paraEstadoCivil(valor: string | undefined): EstadoCivil {
     return achada;
 }
 
-const ESTADOS_CIVIS = ["Solteiro", "Casado", "Viúvo", "Divorciado"] as const;
-type EstadoCivil = (typeof ESTADOS_CIVIS) [number];
+/* Funções que normalizam os campos de Cliente, Agencia e Conta */
+
 function normalizarCliente(linha: Record<string, string>): Cliente {
     return {
         id: textoObrigatorio(linha.id, "id"),
@@ -33,13 +38,13 @@ function normalizarCliente(linha: Record<string, string>): Cliente {
         estadoCivil: paraEstadoCivil(linha.estadoCivil),
         codigoAgencia: paraNumero(linha.codigoAgencia)
     };
-
 }
 
 export function normalizarClientes(linhas: Record<string, string>[]): {clientes: Cliente[], avisos: string[]} {
     const clientes: Cliente[] = [];
     const avisos: string[] = [];
 
+    //Normaliza todas as linhas. Adiciona linha a 'avisos' caso haja algo errado.
     linhas.forEach((linha, indice) => {
         try {
             clientes.push(normalizarCliente(linha));
@@ -50,6 +55,7 @@ export function normalizarClientes(linhas: Record<string, string>[]): {clientes:
     });
     return {clientes, avisos};
 }
+
 
 function normalizarAgencia(linha: Record<string, string>): Agencia {
     return{
@@ -74,7 +80,6 @@ export function normalizarAgencias(linhas: Record<string, string>[]): {agencias:
         });
     return {agencias, avisos};
 }
-
 
 
 function paraTipoConta(valor: string | undefined): TipoConta {

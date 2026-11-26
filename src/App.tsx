@@ -22,12 +22,9 @@ function App() {
       setDados(resultado);
        if (resultado.avisos.length > 0) {
         console.warn("Avisos ao carregar dados:", resultado.avisos)
-      };
-      })
-      .catch(e => {
-        setErro(e instanceof Error ? e.message : "Erro desconhecido");
-      })
-      .finally(() => {
+      }
+      }).catch(e => {setErro(e instanceof Error ? e.message : "Erro desconhecido");
+      }).finally(() => {
         setCarregando(false);
       });
   }, []);
@@ -49,7 +46,6 @@ function App() {
   return (
     <main>
       <h1>Clientes</h1>
-      <ListaClientes clientes={clientesFiltrados}/>
 
       <label htmlFor="busca">Buscar por nome ou CPF/CNPJ</label>
       <input
@@ -58,6 +54,15 @@ function App() {
         value={busca}
         onChange={evento => setBusca(evento.target.value)}
       />
+
+      {clientesFiltrados.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (<ListaClientes clientes={clientesFiltrados}/>
+    )}
+    <p>{clientesFiltrados.length} clientes</p>
+
+      
+      
+
+      
     </main>
   );
 }

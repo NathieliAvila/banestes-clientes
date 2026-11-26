@@ -1,19 +1,17 @@
 import type { Cliente, Agencia, Conta, DadosCarregados } from "../types"
-
 import { cpfCnpjTemTamanhoValido } from "./conversores";
 
-/* Devolve as contas em que o cpfCnpj do cliente são iguais */
+// Devolve as contas do cliente; lista vazia se não houver nenhuma.
 export function contasDoCliente(contas: Conta[], cpfCnpj: string): Conta[]{
-    return contas.filter((conta) => conta.cpfCnpjCliente === cpfCnpj);
-    
-}  
+    return contas.filter(conta => conta.cpfCnpjCliente === cpfCnpj);
+} 
 
-
+//Liga cliente a uma agência. Ligação feito pelo código, campo utilizado em 'Cliente'.
 export function agenciaDoCliente(agencias: Agencia[], codigoDaAgencia: number): Agencia | undefined {
-    return agencias.find((agencia) => agencia.codigo === codigoDaAgencia);
+    return agencias.find(agencia => agencia.codigo === codigoDaAgencia);
 }
 
-/* Verifica se as contas possuem um cpfCnpj associado e se os clientes estão associados a uma agência existente. Se não, retorna um aviso indicando o id */
+//Verifica se as contas possuem um cpfCnpj associado e se os clientes estão associados a uma agência existente. Se não, retorna um aviso indicando o id.
 export function verificarReferencias(dados: DadosCarregados): string[]{
     const avisos: string[] = [];
         
@@ -23,7 +21,7 @@ export function verificarReferencias(dados: DadosCarregados): string[]{
         });
 
         if(!existe) {
-            avisos.push(`Conta sem cliente / com cpf inexistente: ${conta.id} (CpfCnpj: ${conta.cpfCnpjCliente})`);
+            avisos.push(`Contas - Conta sem cliente / com cpf inexistente: ${conta.id} (CpfCnpj: ${conta.cpfCnpjCliente})`);
         }
     });
 
@@ -33,16 +31,13 @@ export function verificarReferencias(dados: DadosCarregados): string[]{
         });
 
         if(!existe) {
-            avisos.push(`Cliente com agência inexistente: ${cliente.id} Código: ${cliente.codigoAgencia}`);
+            avisos.push(`Clientes - Cliente com agência inexistente: ${cliente.id} Código: ${cliente.codigoAgencia}`);
         }
     })
-
     return avisos;
 } 
 
 /* Verifica se os clientes possuem cpf/cnpj com tamanhos válidos e retorna aqueles que não tem */
 export function verificarDocumentos(clientes: Cliente[]): string[] {
     return clientes.filter(cliente => !cpfCnpjTemTamanhoValido(cliente.cpfCnpj)).map(cliente => `Cliente ${cliente.id}: CPF/CNPJ com ${cliente.cpfCnpj.length} dígitos ${cliente.cpfCnpj}`);
-    
-
 }

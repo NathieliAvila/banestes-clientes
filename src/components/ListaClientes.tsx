@@ -4,6 +4,7 @@ import { formatarData, formatarMoeda } from "../utils/formatacao";
 interface ListaClientesProps {
     clientes: Cliente[];
 } 
+
 function ListaClientes({clientes}: ListaClientesProps) {
     return (
         <ul>
