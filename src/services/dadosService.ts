@@ -1,6 +1,7 @@
 import type { DadosCarregados} from "../types";
 import { normalizarAgencias, normalizarClientes, normalizarContas } from "../utils/normalizacao";
 import { buscarCsv, parsearCsv } from "./csvService";
+import { verificarDocumentos, verificarReferencias } from "../utils/relacionamentos";
 
 const criarURL = (aba: string): string => {
     return `https://docs.google.com/spreadsheets/d/1LkyaeCgiyaIN1IxXnbZQPmVMIcht3PIxMDUXHsvczK0/gviz/tq?tqx=out:csv&sheet=${aba}`;
@@ -28,10 +29,23 @@ export async function carregarDados(): Promise<DadosCarregados> {
     const resultadoAgencias = normalizarAgencias(linhasAgencias);
     const clientesAviso = comOrigem("Clientes", resultadoClientes.avisos);
     const contasAviso = comOrigem("Contas", resultadoContas.avisos);
-    const agenciasAviso = comOrigem("Agencias", resultadoAgencias.avisos);
+    const agenciasAviso = comOrigem("Agências", resultadoAgencias.avisos);
 
-    return{clientes: resultadoClientes.clientes, contas: resultadoContas.contas, agencias: resultadoAgencias.agencias, avisos: [...clientesAviso, ...contasAviso, ...agenciasAviso]};
+    const dadosTemporarios: DadosCarregados = {
+        clientes: resultadoClientes.clientes,
+        contas: resultadoContas.contas,
+        agencias: resultadoAgencias.agencias,
+        avisos: [...clientesAviso, ...contasAviso, ...agenciasAviso]
+    }
+    
+    const referenciasAviso = verificarReferencias(dadosTemporarios);
+    const documentosAvisos = verificarDocumentos(dadosTemporarios.clientes)
+
+
+    
+
+    return{clientes: resultadoClientes.clientes, contas: resultadoContas.contas, agencias: resultadoAgencias.agencias, avisos: [...dadosTemporarios.avisos, ...referenciasAviso, ...documentosAvisos]
 
 }
 
-
+}

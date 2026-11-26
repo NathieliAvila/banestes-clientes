@@ -17,8 +17,17 @@ export function paraData(valor: string | undefined): Date {
     if (Number.isNaN(ano) || Number.isNaN(mes) || Number.isNaN(dia)) throw new Error(`Valor inválido: ${valor}`);
     const data = new Date(ano, mes - 1, dia);
 
-    if (data.getFullYear() != ano || data.getMonth() != mes - 1 || data.getDate() != dia ) throw new Error(`Data inválida: ${valor}`);
+    if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() != dia ) throw new Error(`Data inválida: ${valor}`);
 
     return data;
 } 
 
+/* Deixa somente digitos no cpfCnpj*/
+export function normalizarCpfCnpj(valor: string ): string {
+    return valor.replace(/\D/g, "");  
+}
+
+/* Verifica se cpfCnpj possui tamanho de 11 ou 14 caracteres */
+export function cpfCnpjTemTamanhoValido(cpfCnpj: string): boolean {
+    return cpfCnpj.length === 11 || cpfCnpj.length === 14;
+}

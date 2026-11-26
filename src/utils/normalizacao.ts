@@ -1,5 +1,8 @@
 import type { Cliente, Agencia, Conta} from "../types";
-import { paraData, paraNumero, textoOpcional } from "./conversores";
+import { paraData, paraNumero, textoOpcional, normalizarCpfCnpj } from "./conversores";
+
+const TIPO_CONTA = ["corrente", "poupanca"] as const;
+type TipoConta = (typeof TIPO_CONTA) [number];
 
 function textoObrigatorio(valor: string | undefined, nomeDoCampo: string): string {
     if (valor === undefined || valor.trim() === "") throw new Error(`Campo obrigatório vazio: ${nomeDoCampo}`);
@@ -18,7 +21,7 @@ type EstadoCivil = (typeof ESTADOS_CIVIS) [number];
 function normalizarCliente(linha: Record<string, string>): Cliente {
     return {
         id: textoObrigatorio(linha.id, "id"),
-        cpfCnpj: textoObrigatorio(linha.cpfCnpj, "cpfCnpj"),
+        cpfCnpj: normalizarCpfCnpj(textoObrigatorio(linha.cpfCnpj, "cpfCnpj")),
         rg: textoOpcional(linha.rg),
         dataNascimento: paraData(linha.dataNascimento),
         nome: textoObrigatorio(linha.nome, "nome"),
@@ -72,8 +75,7 @@ export function normalizarAgencias(linhas: Record<string, string>[]): {agencias:
     return {agencias, avisos};
 }
 
-const TIPO_CONTA = ["corrente", "poupanca"] as const;
-type TipoConta = (typeof TIPO_CONTA) [number];
+
 
 function paraTipoConta(valor: string | undefined): TipoConta {
     const limpo = valor?.trim().toLowerCase();
@@ -85,7 +87,7 @@ function paraTipoConta(valor: string | undefined): TipoConta {
 function normalizarConta(linha: Record<string, string>): Conta {
     return{
         id: textoObrigatorio(linha.id, "id"),
-        cpfCnpjCliente: textoObrigatorio(linha.cpfCnpjCliente, "cpfCnpjCliente"),
+        cpfCnpjCliente: normalizarCpfCnpj(textoObrigatorio(linha.cpfCnpjCliente, "cpfCnpjCliente")),
         tipo: paraTipoConta(linha.tipo),
         saldo: paraNumero(linha.saldo),
         limiteCredito: paraNumero(linha.limiteCredito),

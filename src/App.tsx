@@ -16,10 +16,7 @@ function App() {
   useEffect(() => {
     carregarDados()
     .then(resultado => {
-      setDados(resultado) 
-      if (resultado.avisos.length > 0) {
-  console.warn("Avisos ao carregar dados:", resultado.avisos);
-};
+      setDados(resultado);
        if (resultado.avisos.length > 0) {
         console.warn("Avisos ao carregar dados:", resultado.avisos)
       };
