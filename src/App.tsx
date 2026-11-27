@@ -22,6 +22,9 @@ function App() {
    // Controla qual página da lista está sendo exibida.
   const [pagina, setPagina] = useState(1);
 
+  const [clienteSelecionadoId, setClienteSelecionadoId] = useState<string | null>(null);
+
+
   // useEffect executa o carregamento dos dados quando o componente é montado. Com [], o efeito roda uma vez.
   useEffect(() => {
     carregarDados().then(resultado => {
@@ -51,6 +54,8 @@ function App() {
   //Mostra clientes de acordo com o que foi digitado pelo usuário.
   const clientesFiltrados = filtrarClientes(dados.clientes, busca);
 
+  const clienteSelecionado = dados.clientes.find(c => c.id === clienteSelecionadoId);
+
   //Paginação. Define quantidade de páginas e quais clientes mostrar em cada.
   const totalPaginas = Math.max(1, Math.ceil(clientesFiltrados.length/POR_PAGINA)); // max garante que mostre pelo menos uma página na interface.
   const inicio = (pagina - 1) * POR_PAGINA;
@@ -61,12 +66,14 @@ function App() {
     <main>
       <h1>Clientes</h1>
       <label htmlFor="busca">Buscar por nome ou CPF/CNPJ</label>
-      <input id="busca" type="search" value={busca} onChange={evento => {setBusca(evento.target.value), setPagina(1)}}/> {/* Sempre que o valor da busca mudar, retorna à primeira página. */}
+      <input id="busca" type="search" value={busca} onChange={evento => {setBusca(evento.target.value); setPagina(1)}}/> {/* Sempre que o valor da busca mudar, retorna à primeira página. */}
 
       {/* Se nenhum cliente corresponder a filtragem, retorna uma mensagem. Se corresponder, renderiza o componente */}
-      {clientesFiltrados.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (<ListaClientes clientes={clientesDaPagina}/>
+      {clientesFiltrados.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (<ListaClientes clientes={clientesDaPagina} aoSelecionar={setClienteSelecionadoId}/>
     )}
     <p>{clientesFiltrados.length} clientes</p>
+
+    <p>{clienteSelecionado?.nome}</p>
 
     <button disabled={pagina===1} onClick={() => setPagina(pagina - 1)}>Anterior</button>
     <p>Página {pagina} de {totalPaginas}</p>
