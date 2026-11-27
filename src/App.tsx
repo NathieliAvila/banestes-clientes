@@ -7,6 +7,7 @@ import ListaClientes from './components/ListaClientes';
 import { filtrarClientes } from './utils/busca';
 import DetalheCliente from './components/DetalheCliente';
 import { contasDoCliente, agenciaDoCliente } from './utils/relacionamentos';
+import FormularioCliente from './components/FormularioCliente';
 
 //Define quantos clientes serão mostrados por página. Manter constante evita repetir o número 10 no código.
 const POR_PAGINA = 10;
@@ -88,6 +89,8 @@ function App() {
         {clientesFiltrados.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (<ListaClientes clientes={clientesDaPagina} aoSelecionar={setClienteSelecionadoId} />
         )}
         <p>{clientesFiltrados.length} clientes</p>
+
+        {<FormularioCliente/>}
 
   
 

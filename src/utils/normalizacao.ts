@@ -1,7 +1,7 @@
 import type { Cliente, Agencia, Conta} from "../types";
 import { paraData, paraNumero, textoOpcional, normalizarCpfCnpj } from "./conversores";
 
-const ESTADOS_CIVIS = ["Solteiro", "Casado", "Viúvo", "Divorciado"] as const;
+export const ESTADOS_CIVIS = ["Solteiro", "Casado", "Viúvo", "Divorciado"] as const;
 type EstadoCivil = (typeof ESTADOS_CIVIS) [number];
 
 const TIPO_CONTA = ["corrente", "poupanca"] as const;
