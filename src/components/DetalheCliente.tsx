@@ -1,12 +1,14 @@
-import type { Cliente } from "../types";
+import type { Agencia, Cliente, Conta } from "../types";
 import { formatarData, formatarMoeda } from "../utils/formatacao";
 
 interface DetalheClienteProps {
     cliente: Cliente;
     aoVoltar: ()=> void;
+    contas: Conta[];
+    agencia?: Agencia;
 }
 
-function DetalheCliente({cliente, aoVoltar}: DetalheClienteProps) {
+function DetalheCliente({cliente, aoVoltar, contas, agencia}: DetalheClienteProps) {
     return (
         <section>
             <button onClick={aoVoltar}>Voltar</button>
@@ -22,7 +24,15 @@ function DetalheCliente({cliente, aoVoltar}: DetalheClienteProps) {
             <p>Renda Anual: {formatarMoeda(cliente.rendaAnual)}</p>
             <p>Patrimônio: {formatarMoeda(cliente.patrimonio)}</p>
             <p>Código da agência: {cliente.codigoAgencia}</p>
-
+            <h3>Contas</h3>
+                {contas.length === 0 ? (<p>Nenhuma conta</p>) : contas.map(conta => (
+                    (<div key={conta.id}>
+                        <p>Tipo: {conta.tipo}</p>
+                        <p>Saldo: {formatarMoeda(conta.saldo)}</p>
+                        <p>Limite de crédito: {formatarMoeda(conta.limiteCredito)}</p>
+                        <p>Crédito disponível: {formatarMoeda(conta.creditoDisponivel)}</p>
+                    </div>)
+                ))}
            
         </section>
     );

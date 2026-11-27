@@ -6,6 +6,7 @@ import './App.css'
 import ListaClientes from './components/ListaClientes';
 import { filtrarClientes } from './utils/busca';
 import DetalheCliente from './components/DetalheCliente';
+import { contasDoCliente, agenciaDoCliente } from './utils/relacionamentos';
 
 //Define quantos clientes serão mostrados por página. Manter constante evita repetir o número 10 no código.
 const POR_PAGINA = 10;
@@ -56,7 +57,15 @@ function App() {
   //Mostra clientes de acordo com o que foi digitado pelo usuário.
   const clientesFiltrados = filtrarClientes(dados.clientes, busca);
 
+  //find retorna o cliente que satisfaz a condição ou undefined.
   const clienteSelecionado = dados.clientes.find(c => c.id === clienteSelecionadoId);
+
+  //seleciona contas associadas ao cpf/cnpj do cliente selecionado.
+  const contasDoSelecionado = clienteSelecionado ? contasDoCliente(dados.contas, clienteSelecionado.cpfCnpj) : [];
+
+  const agenciaDoSelecionado = clienteSelecionado ? agenciaDoCliente(dados.agencias, clienteSelecionado.codigoAgencia): undefined;
+
+  
 
   //Paginação. Define quantidade de páginas e quais clientes mostrar em cada.
   const totalPaginas = Math.max(1, Math.ceil(clientesFiltrados.length / POR_PAGINA)); // max garante que mostre pelo menos uma página na interface.
@@ -66,8 +75,7 @@ function App() {
   //RENDERIZAÇÃO DA INTERFACE
   return (
     <main>
-
-      {clienteSelecionado ? (<DetalheCliente cliente={clienteSelecionado} aoVoltar={() => setClienteSelecionadoId(null)}
+      {clienteSelecionado ? (<DetalheCliente cliente={clienteSelecionado} aoVoltar={() => setClienteSelecionadoId(null)} contas={contasDoSelecionado}
       />
       ) : (<>
 
@@ -76,22 +84,20 @@ function App() {
         <input id="busca" type="search" value={busca} onChange={evento => { setBusca(evento.target.value); setPagina(1) }} /> {/* Sempre que o valor da busca mudar, retorna à primeira página. */}
 
         {/* Se nenhum cliente corresponder a filtragem, retorna uma mensagem. Se corresponder, renderiza o componente */}
+
         {clientesFiltrados.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (<ListaClientes clientes={clientesDaPagina} aoSelecionar={setClienteSelecionadoId} />
         )}
         <p>{clientesFiltrados.length} clientes</p>
 
-
+        
+        
+        
 
 
         <button disabled={pagina === 1} onClick={() => setPagina(pagina - 1)}>Anterior</button>
         <p>Página {pagina} de {totalPaginas}</p>
         <button disabled={pagina === totalPaginas} onClick={() => setPagina(pagina + 1)}>Próxima</button>
-
-
       </>)}
-
-
-
     </main>
   );
 }
