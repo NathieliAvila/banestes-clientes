@@ -63,7 +63,7 @@ function App() {
   //seleciona contas associadas ao cpf/cnpj do cliente selecionado.
   const contasDoSelecionado = clienteSelecionado ? contasDoCliente(dados.contas, clienteSelecionado.cpfCnpj) : [];
 
-  const agenciaDoSelecionado = clienteSelecionado ? agenciaDoCliente(dados.agencias, clienteSelecionado.codigoAgencia): undefined;
+  const agenciaDoSelecionado = clienteSelecionado ? agenciaDoCliente(dados.agencias, clienteSelecionado.codigoAgencia) : undefined;
 
   
 
@@ -75,7 +75,7 @@ function App() {
   //RENDERIZAÇÃO DA INTERFACE
   return (
     <main>
-      {clienteSelecionado ? (<DetalheCliente cliente={clienteSelecionado} aoVoltar={() => setClienteSelecionadoId(null)} contas={contasDoSelecionado}
+      {clienteSelecionado ? (<DetalheCliente cliente={clienteSelecionado} aoVoltar={() => setClienteSelecionadoId(null)} contas={contasDoSelecionado} agencia={agenciaDoSelecionado}
       />
       ) : (<>
 
@@ -89,10 +89,7 @@ function App() {
         )}
         <p>{clientesFiltrados.length} clientes</p>
 
-        
-        
-        
-
+  
 
         <button disabled={pagina === 1} onClick={() => setPagina(pagina - 1)}>Anterior</button>
         <p>Página {pagina} de {totalPaginas}</p>

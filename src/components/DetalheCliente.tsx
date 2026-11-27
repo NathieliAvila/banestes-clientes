@@ -13,7 +13,7 @@ function DetalheCliente({cliente, aoVoltar, contas, agencia}: DetalheClienteProp
         <section>
             <button onClick={aoVoltar}>Voltar</button>
             <h2>{cliente.nome}</h2>
-            <p>Nome social: {cliente.nomeSocial?? "Não informado"}</p>
+            <p>Nome social: {cliente.nomeSocial ?? "Não informado"}</p>
             <p>ID: {cliente.id}</p>
             <p>CPF/CNPJ: {cliente.cpfCnpj}</p>
             <p>RG: {cliente.rg ?? "Não informado"}</p>
@@ -25,14 +25,22 @@ function DetalheCliente({cliente, aoVoltar, contas, agencia}: DetalheClienteProp
             <p>Patrimônio: {formatarMoeda(cliente.patrimonio)}</p>
             <p>Código da agência: {cliente.codigoAgencia}</p>
             <h3>Contas</h3>
-                {contas.length === 0 ? (<p>Nenhuma conta</p>) : contas.map(conta => (
-                    (<div key={conta.id}>
-                        <p>Tipo: {conta.tipo}</p>
-                        <p>Saldo: {formatarMoeda(conta.saldo)}</p>
-                        <p>Limite de crédito: {formatarMoeda(conta.limiteCredito)}</p>
-                        <p>Crédito disponível: {formatarMoeda(conta.creditoDisponivel)}</p>
-                    </div>)
-                ))}
+            {contas.length === 0 ? (<p>Nenhuma conta</p>) : contas.map(conta => (
+                (<div key={conta.id}>
+                    <p>Tipo: {conta.tipo}</p>
+                    <p>Saldo: {formatarMoeda(conta.saldo)}</p>
+                    <p>Limite de crédito: {formatarMoeda(conta.limiteCredito)}</p>
+                    <p>Crédito disponível: {formatarMoeda(conta.creditoDisponivel)}</p>
+                </div>)
+            ))}
+            <h3>Agência</h3>
+            {agencia === undefined ? (<p>Nenhuma agência com o código {cliente.codigoAgencia} encontrada.</p>) : 
+            (<div>
+                <p>ID: {agencia.id}</p>
+                <p>Código: {agencia.codigo}</p>
+                <p>Nome: {agencia.nome}</p>
+                <p>Endereço: {agencia.endereco}</p>
+            </div>)}
            
         </section>
     );
