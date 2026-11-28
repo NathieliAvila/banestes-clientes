@@ -90,7 +90,7 @@ function App() {
         )}
         <p>{clientesFiltrados.length} clientes</p>
 
-        {<FormularioCliente/>}
+        {<FormularioCliente agencias={dados.agencias}/>}
 
   
 

@@ -1,20 +1,25 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clienteSchema } from "../schemas/clienteSchema";
-import { z } from "zod";
 import { ESTADOS_CIVIS } from "../utils/normalizacao";
+import type { Agencia } from "../types";
+import type { DadosFormulario } from "../schemas/clienteSchema";
 
 
-//Pede ao TS o tipo que o schema descreve. É como se o schema gerasse a interface. 
-type DadosFormulario = z.infer<typeof clienteSchema>;
 
-function FormularioCliente () {
+interface FormularioClienteProps {
+    agencias: Agencia[];
+}
+
+function FormularioCliente ({agencias}: FormularioClienteProps) {
     const {register, handleSubmit, formState: {errors} } = 
     useForm<DadosFormulario>({resolver: zodResolver(clienteSchema)});
 
 function aoEnviar(dados: DadosFormulario) {
     console.log(dados);
 }
+
+
 
 return (
     <form onSubmit={handleSubmit(aoEnviar)}>
@@ -45,8 +50,12 @@ return (
         {errors.endereco && <p>{errors.endereco.message}</p>}
 
         <label htmlFor="rendaAnual">Renda anual: </label>
-        <input type="number"  id="rendaAnual" {...register("rendaAnual")} />
+        <input type="number" step="0.01" id="rendaAnual" {...register("rendaAnual")} />
         {errors.rendaAnual && <p>{errors.rendaAnual.message}</p>}
+
+        <label htmlFor="patrimonio">Patrimônio: </label>
+        <input type="number" step="0.01" id="patrimonio" {...register("patrimonio")} />
+        {errors.patrimonio && <p>{errors.patrimonio.message}</p>}
 
         <label htmlFor="estadoCivil">Estado civil: </label>
         <select id="estadoCivil" {...register("estadoCivil")}>
@@ -56,6 +65,16 @@ return (
             ))}
         </select>
         {errors.estadoCivil && <p>{errors.estadoCivil.message}</p>}
+
+        <label htmlFor="codigoAgencia">Agência: </label>
+        <select id="codigoAgencia" {...register("codigoAgencia")}>
+            <option value="">Selecione</option>
+            {agencias.map(agencia => 
+                (<option key={agencia.id} value={agencia.codigo}>{agencia.nome}</option>
+            ))}
+        </select>
+    
+        {errors.codigoAgencia && <p>{errors.codigoAgencia.message}</p>}
 
         <button type="submit">Cadastrar</button>
             
